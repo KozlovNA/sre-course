@@ -1,20 +1,20 @@
-23:44:10 /unready на hello-dd7577b74-mbvr4
+00:53:29 /unready на hello-dd7577b74-5nlm2
 ok
 
 NAME                    READY   STATUS    RESTARTS   AGE
-hello-dd7577b74-mbvr4   0/1     Running   0          68s
-hello-dd7577b74-qv457   1/1     Running   0          46s
+hello-dd7577b74-5nlm2   0/1     Running   0          12m
+hello-dd7577b74-qflq9   1/1     Running   0          18m
 
 NAME    ENDPOINTS          AGE
-hello   10.244.0.22:8080   17m
+hello   10.244.0.27:8080   87m
 
-23:44:26 /ready-on на hello-dd7577b74-mbvr4
+00:53:45 /ready-on на hello-dd7577b74-5nlm2
 ok
 
 NAME                    READY   STATUS    RESTARTS   AGE
-hello-dd7577b74-mbvr4   1/1     Running   0          82s
-hello-dd7577b74-qv457   1/1     Running   0          60s
+hello-dd7577b74-5nlm2   1/1     Running   0          12m
+hello-dd7577b74-qflq9   1/1     Running   0          18m
 
 NAME    ENDPOINTS                           AGE
-hello   10.244.0.20:8080,10.244.0.22:8080   18m
+hello   10.244.0.27:8080,10.244.0.29:8080   87m
 

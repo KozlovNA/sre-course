@@ -4,5 +4,5 @@
 по версиям:
   v1: 793
 по подам:
-  hello-dd7577b74-mbvr4: 238
-  hello-dd7577b74-qv457: 555
+  hello-dd7577b74-5nlm2: 267
+  hello-dd7577b74-qflq9: 526

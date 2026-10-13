@@ -1,15 +1,15 @@
 # ДЗ 1 Kubernetes
 
-Скринкаст: TODO
+[Скринкаст](https://drive.google.com/file/d/1wJszikvuB9cz5tcNLVXSE2-_AXwNLbsp/view?usp=sharing) 
 
 Таймкоды:
 - 00:00 что будет в видео
-- TODO манифесты
-- TODO запуск
-- TODO сценарий 1
-- TODO сценарий 2
-- TODO сценарий 3
-- TODO выводы
+- 1:40 манифесты
+- 3:20 запуск
+- 3:50 сценарий 1
+- 5:06 сценарий 2
+- 6:23 сценарий 3
+- 8:12 выводы
 
 ## Что сделал
 
@@ -100,22 +100,23 @@ python3 load/scenario3.py
 успешных: 793
 ошибок: 0
 по подам:
-  hello-dd7577b74-dbf5j: 92    <- удалил
-  hello-dd7577b74-mbvr4: 424
-  hello-dd7577b74-qv457: 277   <- новый
+  hello-dd7577b74-5nlm2: 259   <- новый
+  hello-dd7577b74-994cr: 104   <- удалил
+  hello-dd7577b74-qflq9: 430
 ```
 
 Что было с подами ([scenario1-pods.txt](evidence/scenario1-pods.txt)):
 
 ```
-hello-dd7577b74-dbf5j   1/1     Terminating         0          21s
-hello-dd7577b74-qv457   0/1     Pending             0          0s
-hello-dd7577b74-qv457   0/1     ContainerCreating   0          0s
-hello-dd7577b74-qv457   1/1     Running             0          1s
-hello-dd7577b74-dbf5j   0/1     Completed           0          26s
+hello-dd7577b74-994cr   1/1     Terminating         0          5m3s
+hello-dd7577b74-5nlm2   0/1     Pending             0          0s
+hello-dd7577b74-5nlm2   0/1     ContainerCreating   0          0s
+hello-dd7577b74-5nlm2   0/1     Running             0          0s
+hello-dd7577b74-5nlm2   1/1     Running             0          3s
+hello-dd7577b74-994cr   0/1     Completed           0          5m8s
 ```
 
-Удалил под в 23:43:30 ([scenario1-actions.txt](evidence/scenario1-actions.txt)). Сразу создался новый, примерно через секунду он стал Ready (1/1), то есть Ready-подов было 1 из 2 около секунды. Последний ответ от старого пода был в 23:43:30, первый от нового в 23:43:32. Ошибок нет, потому что второй под все это время работал, а старый благодаря preStop не закрылся сразу.
+Удалил под в 00:41:24 ([scenario1-actions.txt](evidence/scenario1-actions.txt)). Сразу создался новый, через 3 секунды он стал Ready (1/1), то есть Ready-подов было 1 из 2 около 3 секунд. Последний ответ от старого пода был в 00:41:24, первый от нового в 00:41:27. Ошибок нет, потому что второй под все это время работал, а старый благодаря preStop не закрылся сразу.
 
 ## Сценарий 2. Not-ready
 
@@ -125,38 +126,40 @@ hello-dd7577b74-dbf5j   0/1     Completed           0          26s
 
 ```
 NAME                    READY   STATUS    RESTARTS   AGE
-hello-dd7577b74-mbvr4   0/1     Running   0          68s
-hello-dd7577b74-qv457   1/1     Running   0          46s
+hello-dd7577b74-5nlm2   0/1     Running   0          12m
+hello-dd7577b74-qflq9   1/1     Running   0          18m
 
 NAME    ENDPOINTS          AGE
-hello   10.244.0.22:8080   17m
+hello   10.244.0.27:8080   87m
 ```
 
-Под mbvr4 стал 0/1 и пропал из Endpoints, RESTARTS 0. После `/ready-on` он вернулся:
+Под 5nlm2 стал 0/1 и пропал из Endpoints, RESTARTS 0. После `/ready-on` он вернулся:
 
 ```
-hello-dd7577b74-mbvr4   1/1     Running   0          82s
+hello-dd7577b74-5nlm2   1/1     Running   0          12m
 
 NAME    ENDPOINTS                           AGE
-hello   10.244.0.20:8080,10.244.0.22:8080   18m
+hello   10.244.0.27:8080,10.244.0.29:8080   87m
 ```
 
 Сколько запросов приходило на этот под по секундам ([scenario2-traffic.txt](evidence/scenario2-traffic.txt)):
 
 ```
-23:44:10  hello-dd7577b74-mbvr4: 11   <- /unready
-23:44:11  hello-dd7577b74-mbvr4: 11
-23:44:12  hello-dd7577b74-mbvr4: 6
-23:44:13  hello-dd7577b74-mbvr4: 5
-23:44:14  hello-dd7577b74-mbvr4: 0
+00:53:29  hello-dd7577b74-5nlm2: 10   <- /unready
+00:53:30  hello-dd7577b74-5nlm2: 11
+00:53:31  hello-dd7577b74-5nlm2: 5
+00:53:32  hello-dd7577b74-5nlm2: 10
+00:53:33  hello-dd7577b74-5nlm2: 6
+00:53:34  hello-dd7577b74-5nlm2: 0
 ...
-23:44:26  hello-dd7577b74-mbvr4: 0    <- /ready-on
-23:44:27  hello-dd7577b74-mbvr4: 5
+00:53:45  hello-dd7577b74-5nlm2: 0    <- /ready-on
+00:53:46  hello-dd7577b74-5nlm2: 0
+00:53:47  hello-dd7577b74-5nlm2: 3
 ```
 
 Итог: 793 запроса, 0 ошибок ([scenario2-stats.txt](evidence/scenario2-stats.txt)).
 
-Трафик на под прекратился примерно через 4 секунды после `/unready` (проба раз в 2 секунды, нужно 2 ошибки). Под не перезапустился, потому что liveness проверяет `/live`, а не `/ready`.
+Трафик на под прекратился примерно через 4-5 секунд после `/unready` (проба раз в 2 секунды, нужно 2 ошибки, плюс время на обновление правил). После `/ready-on` трафик вернулся через 2 секунды. Под не перезапустился, потому что liveness проверяет `/live`, а не `/ready`.
 
 ## Сценарий 3. Обновление v1 -> v2
 
@@ -165,25 +168,24 @@ hello   10.244.0.20:8080,10.244.0.22:8080   18m
 Результат ([scenario3-stats.txt](evidence/scenario3-stats.txt)):
 
 ```
-всего запросов: 991
-успешных: 991
+всего запросов: 992
+успешных: 992
 ошибок: 0
 по версиям:
-  v1: 245
-  v2: 746
+  v1: 236
+  v2: 756
 ```
 
 Версии по секундам ([scenario3-versions.txt](evidence/scenario3-versions.txt)):
 
 ```
-23:45:00  version=v1: 20  version=v2: 0    <- set image
-23:45:01  version=v1: 20  version=v2: 0
-23:45:02  version=v1: 12  version=v2: 7
-23:45:03  version=v1: 4  version=v2: 16
-23:45:04  version=v1: 0  version=v2: 20
+01:02:51  version=v1: 20  version=v2: 0    <- set image
+01:02:52  version=v1: 20  version=v2: 0
+01:02:53  version=v1: 11  version=v2: 8
+01:02:54  version=v1: 0  version=v2: 20
 ```
 
-Обновление заняло около 2 секунд ([scenario3-rollout.txt](evidence/scenario3-rollout.txt)). Сначала создался один под v2, когда он стал Ready, удалился один v1, потом то же самое со вторым ([scenario3-pods.txt](evidence/scenario3-pods.txt)). Примерно 2 секунды отвечали обе версии сразу. Ошибок нет: из-за `maxUnavailable: 0` рабочих подов всегда было не меньше 2, а старые поды не закрывались сразу из-за preStop.
+Обновление заняло около 2 секунд ([scenario3-rollout.txt](evidence/scenario3-rollout.txt)). Сначала создался один под v2, когда он стал Ready, удалился один v1, потом то же самое со вторым ([scenario3-pods.txt](evidence/scenario3-pods.txt)). Примерно секунду отвечали обе версии сразу. Ошибок нет: из-за `maxUnavailable: 0` рабочих подов всегда было не меньше 2, а старые поды не закрывались сразу из-за preStop.
 
 ## Границы гарантий
 

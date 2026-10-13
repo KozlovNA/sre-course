@@ -1,4 +1,4 @@
-23:45:00 kubectl set image deployment/hello hello=hello-app:v2
+01:02:51 kubectl set image deployment/hello hello=hello-app:v2
 deployment.apps/hello image updated
 
 Waiting for deployment "hello" rollout to finish: 1 out of 2 new replicas have been updated...
@@ -8,8 +8,8 @@ Waiting for deployment "hello" rollout to finish: 1 old replicas are pending ter
 Waiting for deployment "hello" rollout to finish: 1 old replicas are pending termination...
 deployment "hello" successfully rolled out
 
-23:45:02 rollout done
+01:02:53 rollout done
 NAME              DESIRED   CURRENT   READY   AGE
-hello-9957cb957   2         2         2       16m
-hello-dd7577b74   0         0         0       18m
+hello-9957cb957   2         2         2       94m
+hello-dd7577b74   0         0         0       96m
 
