@@ -1,0 +1,16 @@
+NAME                    READY   STATUS    RESTARTS   AGE   IP           NODE                 NOMINATED NODE   READINESS GATES
+hello-dd7577b74-5bf2j   1/1     Running   0          15s   10.244.0.5   kind-control-plane   <none>           <none>
+hello-dd7577b74-vlt2g   1/1     Running   0          15s   10.244.0.6   kind-control-plane   <none>           <none>
+
+NAME    TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+hello   NodePort   10.96.160.104   <none>        80:30080/TCP   15s
+
+NAME    ENDPOINTS                         AGE
+hello   10.244.0.5:8080,10.244.0.6:8080   15s
+
+hello version=v1 pod=hello-dd7577b74-vlt2g
+hello version=v1 pod=hello-dd7577b74-5bf2j
+hello version=v1 pod=hello-dd7577b74-vlt2g
+hello version=v1 pod=hello-dd7577b74-5bf2j
+hello version=v1 pod=hello-dd7577b74-vlt2g
+hello version=v1 pod=hello-dd7577b74-5bf2j
