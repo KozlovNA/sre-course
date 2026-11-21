@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"sync/atomic"
@@ -37,8 +38,9 @@ func newHandler(version, pod string) http.Handler {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		enabled := r.URL.Query()["enabled"]
-		if len(enabled) != 1 || (enabled[0] != "true" && enabled[0] != "false") {
+		query, err := url.ParseQuery(r.URL.RawQuery)
+		enabled := query["enabled"]
+		if err != nil || len(enabled) != 1 || (enabled[0] != "true" && enabled[0] != "false") {
 			http.Error(w, "use enabled=true or enabled=false", http.StatusBadRequest)
 			return
 		}

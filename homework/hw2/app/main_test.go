@@ -28,6 +28,7 @@ func TestInvalidFeatureValue(t *testing.T) {
 		"/admin/feature",
 		"/admin/feature?enabled=0",
 		"/admin/feature?enabled=false&enabled=true",
+		"/admin/feature?enabled=false&enabled=%zz",
 	} {
 		checkResponse(t, handler, path, http.StatusBadRequest, "use enabled=true or enabled=false\n")
 		checkResponse(t, handler, "/feature", http.StatusOK, "new-greeting=true\n")
