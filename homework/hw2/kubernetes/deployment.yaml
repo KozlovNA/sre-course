@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-hw2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-hw2
+  template:
+    metadata:
+      labels:
+        app: hello-hw2
+    spec:
+      containers:
+        - name: hello
+          image: hello-hw2:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8080
