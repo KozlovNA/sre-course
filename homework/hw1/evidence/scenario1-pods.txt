@@ -1,0 +1,15 @@
+NAME                    READY   STATUS    RESTARTS   AGE
+hello-dd7577b74-994cr   1/1     Running   0          4m53s
+hello-dd7577b74-qflq9   1/1     Running   0          6m21s
+hello-dd7577b74-994cr   1/1     Terminating   0          5m3s
+hello-dd7577b74-994cr   1/1     Terminating   0          5m3s
+hello-dd7577b74-5nlm2   0/1     Pending       0          0s
+hello-dd7577b74-5nlm2   0/1     Pending       0          0s
+hello-dd7577b74-5nlm2   0/1     ContainerCreating   0          0s
+hello-dd7577b74-5nlm2   0/1     ContainerCreating   0          0s
+hello-dd7577b74-5nlm2   0/1     Running             0          0s
+hello-dd7577b74-5nlm2   1/1     Running             0          3s
+hello-dd7577b74-5nlm2   1/1     Running             0          3s
+hello-dd7577b74-994cr   0/1     Completed           0          5m8s
+hello-dd7577b74-994cr   0/1     Completed           0          5m9s
+hello-dd7577b74-994cr   0/1     Completed           0          5m9s
