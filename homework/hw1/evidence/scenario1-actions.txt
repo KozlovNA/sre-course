@@ -1,0 +1,1 @@
+00:41:24 kubectl delete pod/hello-dd7577b74-994cr
